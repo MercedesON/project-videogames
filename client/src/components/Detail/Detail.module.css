@@ -1,0 +1,76 @@
+.container{
+   background:  linear-gradient(165deg, #8ea66f 0, #85a874 3.57%, #7ca979 7.14%, #73ab80 10.71%, #6aac87 14.29%, #61ad8e 17.86%, #58ad96 21.43%, #4fad9e 25%, #47aea6 28.57%, #40adae 32.14%, #3badb5 35.71%, #3aacbc 39.29%, #3bacc3 42.86%, #41aac8 46.43%, #49a9cd 50%, #53a7d1 53.57%, #5ea5d4 57.14%, #6aa3d6 60.71%, #76a1d6 64.29%, #829ed6 67.86%, #8e9cd5 71.43%, #9999d2 75%, #a496ce 78.57%, #ad93ca 82.14%, #b691c5 85.71%, #be8fbf 89.29%, #c58cb8 92.86%, #cb8bb1 96.43%, #cf89a9 100%);    
+}
+.detail {
+    /*display: flex;*/
+    column-count: 2; 
+    column-gap: 40px;
+    justify-content: space-evenly;  
+    width: 100vw;
+    height: 100vh;
+}
+.detail h3{
+ flex-direction: column;
+}
+
+.Titulo {
+  text-align: center;
+  padding-right: 585px;
+  padding-left: 475px;
+  font-weight: bold;
+  font-size: large;
+  color: black;
+}
+.imgCard{
+  width: 600px;
+  height: 400px;
+  margin-left: 20px;
+  border-radius: 10px;
+  box-shadow: 1px 1px 10px 2px rgba(0,0,0,0.75);
+  background-size:contain;
+}
+.imgCard:hover::after {
+    box-shadow: 0px 0px 0px 10px ;
+}
+
+.Nav_link {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background: rgb(8, 91, 80);
+  color: #fff;
+  line-height: 2rem;
+  display: grid;
+  align-items: center;
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0;
+  padding-left: 20px;
+  padding-right: 10px;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  font-size: 1.2rem;
+}
+.Nav_link:visited {
+  color: #1b1b1b;
+}
+.Nav_link:hover {
+  color: #fff;
+  background: rgb(8, 91, 80);
+  border-bottom: 0.4rem solid teal;
+}
+.Nav_link:active {
+  color: teal;
+}
+
+@keyframes animateBorderOne {
+    to {
+      outline-color: #69D2E7;
+      box-shadow: 0 0 0 10px #E0E4CC;
+    }
+  }
+
