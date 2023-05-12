@@ -11,6 +11,7 @@ const STATUS_ERROR = 404;
 
 
 async function getAllGenres(req, res) {
+  console.log("carga-getAllGenres");
   try {
       let genresBDFin=[];
       let genresBD = await Genres.findAll({          

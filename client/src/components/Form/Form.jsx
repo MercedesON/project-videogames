@@ -1,137 +1,187 @@
-import { useState, useEffect } from "react";
 import styles from "./Form.module.css";
 //import validation from "./validation";
-//import { useDispatch, useSelector } from "react-redux";
-import { createGames } from "../../redux/actions";
-import { NavLink } from 'react-router-dom/cjs/react-router-dom.min';
-//import ReactModal from 'react-modal';
-import { getAllGenres, getAllPlatforms,createGames } from '../../redux/actions.js';
+import { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import { getAllGenres, getAllPlatforms,createGames } from "../../redux/actions";
+//import { MultiSelect } from "react-multi-select-component";
 
-export default function Form() {
-  const [name, setName] = useState('');
-  const [image, setImage] = useState('');
-  const [description, setdescription] = useState('');
-  const [platforms, setSelectedPlatforms] = useState('');
-  const [release, setRelease] = useState('0');
-  const [rating, setRating] = useState('0');
-  const [genero, setSelectedGenero] = useState('');
+//const regexEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+//const regexPassword =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,10}/;
 
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  
+
+export default function Form({ formCreate, genres, platforms }) {
   const [allGenres, setDataGeneres] = useState([]);
   const [allPlatforms, setDataPlatforms] = useState([]);
+  let allPlatformsSelect="All";
+  let allGenresSelect=[];
   
-  /*useEffect(() => {
-    getAllGenres().then((response) => {
-      setDataGeneres(response.data);
-    });
-    getAllPlatforms().then((response) => {
-      setDataPlatforms(response.data);
-    });
+  useEffect(() => {
 
-  },[])*/
-
-  
-  const resetForm = () => {
-    setName('');
-    setdescription('');
-    setSelectedPlatforms('');
-    setRelease('');
-    setRating('0');
-    setSelectedGenero('');
-  };
-
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newVideogame = {
-      name,
-      description,
-      platforms,
-      release,
-      image,
-      rating,
-      genero,
-    };
-
-    setShowModal(true);
-    // Validar los campos del formulario
-    const formErrors = {};
-
-    if (!/^[a-zA-Z]+$/.test(name)) {
-      formErrors.name = 'The name only can contain letters';
-      //alert('The name only can contain letters');
+    if (!genres) {
+      getAllGenres().then((response) => {
+        setDataGeneres(response.data);
+      });
     }
-
-    if (!/^[0-9]+$/.test(rating)) {
-      formErrors.rating = 'The rating score only can contain numbers';
+    if (!platforms) {
+      getAllPlatforms().then((response) => {
+        setDataPlatforms(response.data);
+      });
     }
+  }, [genres, platforms]);
 
-    if (Object.keys(formErrors).length > 0) {
-      //setErrors(formErrors);
-      return;
+  const [inputs, setInputs] = useState({
+    name: "",
+    image: "",
+    description: "",
+    released: "",
+    rating: "",
+    platforms: "",
+    genres: "",  
+
+  });
+  const [errors, setErrors] = useState({
+    name: "",
+    image: "",
+    description: "",
+    released: "",
+    rating: "",
+    platforms: "",
+    genres: "",
+  });
+  const AddSelectGenres = (event) => {   
+    const isChecked = event.target.checked;
+    const Value = event.target.value;
+    if(isChecked){   
+      console.log("isChecked");  
+      allGenresSelect.push(Value);
+      inputs.genres=allGenresSelect;
+    }else{
+      console.log("desscheck");
+      allGenresSelect=allGenresSelect.filter((g) => g !== Value);
+      inputs.genres=allGenresSelect;
     }
-
-    const videogameData = JSON.parse(localStorage.getItem('videogames')) || [];
-    videogameData.push(newVideogame);
-    localStorage.setItem('videogames', JSON.stringify(videogameData));
-    try {
-      const response = createGames(newVideogame);
-      console.log(response);
-      setShowSuccessMessage(true); // Muestra mensaje de éxito de envío de formulario.
-      resetForm();
-    } catch (error) {
-      console.error(error);
-    }
-
-  };
-
-const handleClickGenres =(event)=>{
-    event.preventDefault()   
-    
 }
-  const handleNameChange = (event) => {
-    setName(event.target.value);
-  };
 
-  const handleDescriptionChange = (event) => {
-    setdescription(event.target.value);
-  };
-
-  const handleImageChange = (event) => {
-    setImage(event.target.value);
-  };
-
-  const handleReleaseChange = (event) => {
-    setRelease(event.target.value);
-  };
-
-  const handleRatingChange = (event) => {
-    setRating(event.target.value);
-  };
-
-  const handlePlatformsChange = (event) => {
-    setSelectedPlatforms(event.target.value);
-  };
-
-  const handleGeneroChange = (event) => {
-    setSelectedGenero(event.target.value);
-  };
+const handleSelectPlatform =(event)=>{
+  //event.preventDefault();
+  allPlatformsSelect=event.target.value;
+  console.log("allPlatformsSelect-allPlatformsSelect");
+  console.log(allPlatformsSelect);
+  inputs.platforms=allPlatformsSelect;
  
-  const ratingInCero = (event) => {
-    if(!gameData.rating) 
-    event.target.value = 0;   
-  };
- 
+}
 
-  return (
+  function validate(inputs) {
+    console.log("validate-inputs"); 
+    console.log(inputs); 
+    const errors = {};
+    if (!inputs.name) {
+      errors.name = "Ingrese Nombre de videogame";
+    } else if (!inputs.image) {
+      errors.image = "Ingrese la ruta de la imagen del videojuego";
+    } else if (!inputs.description) {
+      errors.description = "Ingrese Descripcion de videogame";
+    }else if (!inputs.released) {
+      errors.released = "Ingrese la fecha del videogame";
+    } else if (!inputs.rating) {
+      errors.rating = "Ingrese rating del videogame";
+    }/*else if(allGenresSelect.length===0){
+      errors.genres="Selecciona al menos un género";
+    }else if(allPlatformsSelect==="All")*/
+    errors.platforms="Selecciona al menos una plataforma";
+    return errors;
+  }
+
+  function handleChange(e) {
+    setInputs({
+      ...inputs,
+      [e.target.name]: e.target.value,
+      [e.target.image]: e.target.value,
+      [e.target.description]: e.target.value,
+      [e.target.platforms]: e.target.value,
+      [e.target.released]: e.target.value,
+      [e.target.rating]: e.target.value,
+      [e.target.genres]: e.target.value,
+
+    });
+    setErrors(
+      validate({
+        ...inputs,
+        [e.target.name]: e.target.value,
+        [e.target.image]: e.target.value,        
+      [e.target.description]: e.target.value,
+      [e.target.platforms]: e.target.value,
+      [e.target.released]: e.target.value,
+      [e.target.rating]: e.target.value,
+      [e.target.genres]: e.target.value,
+      })
+    );
+  }
+  function handleSubmit(e) {
+    
+      e.preventDefault();
+      const aux = Object.keys(errors);      
+      console.log("submit-aux");
+      console.log(aux.length);
+      if (aux.length === 0) {
+        formCreate(inputs);
+        setInputs({
+          name: "",
+          image: "",
+          description: "",
+          platforms: "",
+          released: "",
+          rating: "",
+          genres: "",
+
+        });
+        setErrors({
+          name: "",
+          image: "",
+          description: "",
+          platforms: "",
+          released: "",
+          rating: "",
+          genres: "",
+        });
+       
+      } else {        
+        console.log("submit-alerta");      
+        if (!inputs.name) {
+          return alert("Ingrese Nombre de videogame");
+        } else if (!inputs.image) {
+          return alert("Ingrese la ruta de la imagen del videojuego");
+        } else if (!inputs.description) {
+          return alert("Ingrese Descripcion de videogame");
+        }else if (!inputs.released) {
+          return alert("Ingrese la fecha del videogame");
+        } else if (!inputs.rating) {
+          return alert("Ingrese rating del videogame");
+        }else if(allGenresSelect.length===0){
+            return alert("Selecciona al menos un género");
+        }else if(allPlatformsSelect==="All")
+            return alert("Selecciona al menos una plataforma");
+
+            let resp="";
+            createGames(inputs).then((response) => {                            
+                for( var message in response.data){                  
+                  for(let r of response.data[message]){                    
+                    resp+=r;
+                  }
+                }                
+                alert(resp);      
+            });
+            
+      }
+    
+  }
+   return (    
     <div>
-      {showSuccessMessage && (
+      {/* {showSuccessMessage && (
         <div className={styles.successMessage}>
           The videogame was created successfully.
         </div>
-      )}
-      {/* <img src={Image} alt="fruits and vegetables" className={styles.formImageContainer}></img>  */}
+      )} */}
       <ul id="Nav_menu">
         <li>
           <NavLink
@@ -144,54 +194,53 @@ const handleClickGenres =(event)=>{
 
       <form className={styles.formContainer} method='post' onSubmit={handleSubmit}>
         <br />
-        <label htmlFor="name" className={styles.Titulo}>CREATE VIDEOGAME </label>
+        <label htmlFor="titulo" className={styles.Titulo}>CREATE VIDEOGAME </label>
         <label htmlFor="name">Name: </label>
-        <input type="text" name="name" onChange={handleNameChange} />
-        <br />
+        <input className={styles.inputForm}  type="text" name="name" onChange={handleChange} />
+        <p className={styles.danger}>{errors.name}</p>        
         <label htmlFor="image" >Image URL: </label>
-        <input type="url" name="image" onChange={handleImageChange}></input>
-        <br />
+        <input className={styles.inputForm} type="url" name="image" onChange={handleChange}></input>
+        <p className={styles.danger}>{errors.image}</p>        
         <label htmlFor="description" >Description:</label>
-        <textarea name="description" onChange={handleDescriptionChange} ></textarea>
+        <input className={styles.inputForm} type="text" name="description" onChange={handleChange} ></input>
+        <p className={styles.danger}>{errors.description}</p>        
+        <label htmlFor="platforms" >Platforms:</label>             
         <br />
-        <label htmlFor="platforms" >Platforms:</label>
-        {
-            allPlatforms?.map((p) => (
-              <button
-                className={styles.buttonGenres}
-                key={p.name}
-                value={p.name}
-                name="optionsGenres"
-                onClick={(value) => handleClickGenres(value)}>{p.name}</button>
-            
-            ))
-          }
-        <br />
+        <select className={styles.SelecPlatform} onChange={handleSelectPlatform}>                  
+                <option value="All" >Todos</option>
+                    {
+                        allPlatforms?.map((pl)=>(
+                            <option key={pl.id} value={pl.name}>{pl.name}</option>
+                        ))
+                    }
+        </select>   
+        {/* <p className={styles.danger}>{errors.platforms}</p>        */}
+        <br />       
+        <br />   
+        <br /> 
         <label htmlFor="released" className={styles.label}>Released:</label>
-        <input type="date" name="released" onChange={handleReleaseChange} ></input>
-        <br />
+        <input className={styles.inputForm} type="date" name="released" onChange={handleChange} ></input>
+        <p className={styles.danger}>{errors.released}</p>        
         <label htmlFor="rating" className={styles.label}>Rating</label>
-        <input
+        <input className={styles.inputForm}
           type="number"
-          name="rating" onBlur={(event) => ratingInCero(event)}
-          onChange={handleRatingChange} step="0.01"        ></input>
+          name="rating"
+          // onBlur={(event) => ratingInCero(event)}
+          onChange={handleChange} step="0.01"></input>
+        <p className={styles.danger}>{errors.rating}</p>
         <br />
         <label htmlFor="genres" className={styles.label}>Choose your favorites Genres:</label>
-        <div className={styles.contGenres}>
-        
-          {
-            allGenres?.map((genre) => (
-              <button
-                className={styles.buttonGenres}
-                key={genre.name}
-                value={genre.name}
-                name="optionsGenres"
-                onClick={(value) => handleClickGenres(value)}>{genre.name}</button>
-            
+        <br />
+        <div className={styles.containercheckbox}>
+        {
+            allGenres?.map((gen)=>(
+                  <div>
+                    <input className={styles.checkbox} type="checkbox" onClick={(event) => AddSelectGenres(event)} value={gen.id}/>                  
+                    <label className={styles.Labelcheckbox} key={gen.name} htmlFor={gen.name}>{gen.name}</label>
+                  </div>      
             ))
-          }
-
-        </div>
+        }
+        </div>        
         <br />
         <button className={styles.ButtonCreate} type="submit">Save</button>
       </form>

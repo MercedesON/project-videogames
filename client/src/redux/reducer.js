@@ -1,10 +1,13 @@
-import { GET_ALLVIDEOGAMES,CREATE_VIDEOGAMES} from "./actions";
+import { GET_ALLVIDEOGAMES,CREATE_VIDEOGAMES,FILTER_BY_GENRES} from "./actions";
 
 const initialState = {
-    allVideogames: []
+    allVideogames: [],
+    filterVideogames:[]
 }
 
 const rootReducer = (state = initialState,action) =>{
+    console.log("action.type");
+    console.log(action.type);
     switch (action.type) {
         case GET_ALLVIDEOGAMES: return {
             ...state,

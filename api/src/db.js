@@ -6,9 +6,7 @@ const Videojuegos = require("./models/Videogame");
 
 const fs = require('fs');
 const path = require('path');
-const {
-  DB_USER, DB_PASSWORD, DB_HOST,
-} = process.env;
+const {  DB_USER, DB_PASSWORD, DB_HOST} = process.env;
 
 const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/videogames`, {
   logging: false, // set to console.log to see the raw SQL queries
@@ -41,8 +39,8 @@ Videojuegos(sequelize)
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);
-Genres.belongsToMany(Videogame, {through: 'Videogame_Genres'})
-Videogame.belongsToMany(Genres, {through: 'Videogame_Genres'})
+Genres.belongsToMany(Videogame, {through: 'Videogame_Genres',timestamps: false})
+Videogame.belongsToMany(Genres, {through: 'Videogame_Genres',timestamps: false})
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

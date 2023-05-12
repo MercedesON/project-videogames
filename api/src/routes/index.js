@@ -5,7 +5,7 @@ const { genresRouter } = require("../routes/genresRouter")
 const { platformsRouter } = require("../routes/platformsRouter")
 // Ejemplo: const authRouter = require('./auth.js');
 const express = require("express");
-const {getGamesById,getGamesByName,getAllVideogames,getGamesByGenero} = require("../controllers/videogames");
+const {getGamesById,getGamesByName,getAllVideogames,getGamesByGenero,createVideogame} = require("../controllers/videogames");
 const {getAllGenres} = require("../controllers/genres");
 const {getAllPlatforms} = require("../controllers/platforms");
 
@@ -16,9 +16,9 @@ router.use(express.json());
 router.get("/videogames/:idVideogame",getGamesById);
 router.get("/videogames/name/:name",getGamesByName);
 router.get("/videogames", getAllVideogames); 
+router.post("/videogames", createVideogame); 
 
 router.get("/videogames/genres/:filtrogenres",getGamesByGenero);
-
 router.get("/genres", getAllGenres);   
 router.get("/platforms", getAllPlatforms);   
 
