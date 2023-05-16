@@ -659,7 +659,7 @@ async function getAllVideogames(req, res) {
       });
       console.log("mercefin");
       console.log(mercefin);
-let ultdes="";
+      let ultdes="";
       videogameBD.forEach((vg) => {
         let desNomGen=mercefin.filter(el => el.id ==vg.id);   
         if(desNomGen){

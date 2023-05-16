@@ -43,7 +43,6 @@ export default function Detail() {
     return setCharacter({}); 
   }, [id]); 
 
-
   return (    
     <div  className={style.container}>      
     <Link

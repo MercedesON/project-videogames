@@ -1,30 +1,44 @@
 import axios from "axios";
-
-
+export const GET_GENRES = "GET_GENRES";
 export const GET_ALLVIDEOGAMES = "GET_ALLVIDEOGAMES";
 export const CREATE_VIDEOGAMES = "CREATE_VIDEOGAMES";
-export const FILTER_BY_GENRES = "FILTER_BY_GENRES";
+export const ORDER_GAMES = "ORDER_GAMES";
+export const GET_PLATFORMS = "GET_PLATFORMS";
+export const FILTER_GENRES = "FILTER_GENRES";
+//export const FILTER_BY_GENRES = "FILTER_BY_GENRES";
+
+//import { GET_GENRES,GET_ALLVIDEOGAMES,CREATE_VIDEOGAMES,ORDER_GAMES,GET_PLATFORMS,FILTER_GENRES} from "./actions";
+
 //export const GET_PLATFORMS = "GET_PLATFORMS";
 
-
-/*export function getAllGames(){
+export const getGenres = () => {
+  return async function (dispatch) {
+      const response = (await axios.get(`http://localhost:3001/genres`)).data
+      return dispatch({
+        type: GET_GENRES, 
+        payload: response})
+  }
+}
+export function getAllGames(){
   return async function(dispatch){  //despues camabiar el puerto a 3001
       const allGames = await axios.get("http://localhost:3001/videogames")
       .catch(error => alert(error.response.data))
-
       return dispatch({
           type:GET_ALLVIDEOGAMES,
           payload: allGames.data                     
       }) 
   }
-}*/
-export function getAllGames() {
+}
+
+export const orderxGames = (order) => { return { type: ORDER_GAMES, payload: order } }
+export const filterGenre = (filter) => { return { type: FILTER_GENRES, payload: filter } }
+/*export function getAllGames() {
 
   let url = `http://localhost:3001/videogames`;
   const response = axios.get(url);
 
   return response;
-}
+}*/
 
 
 export function getGameById(id) {
@@ -86,6 +100,15 @@ export const filterGenres = (filtrogenres) => {
 
   return response;
 };
+
+export const getPlatforms = () => {
+  return async function (dispatch) {
+      const response = (await axios.get(`http://localhost:3001/platforms`)).data
+      return dispatch({
+        type: GET_PLATFORMS, 
+        payload: response})
+  }
+}
 
 export function getAllPlatforms() {
 

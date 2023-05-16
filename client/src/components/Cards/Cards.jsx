@@ -1,51 +1,73 @@
 import React, { useState, useEffect } from "react";
 //import { useDispatch, useSelector } from "react-redux";//hooks
-import { getAllGames,getGameByName,getAllGenres,filterGenres} from '../../redux/actions.js';
+import { getAllGames,getGameByName,getGenres,filterGenre,orderxGames} from '../../redux/actions.js';
 import style from './Cards.module.css';
 import { NavLink } from "react-router-dom";
-
+import { useDispatch, useSelector } from 'react-redux';
 
 const PaginationCards = ({ cardsPerPage,filterOption }) => {
   //const dispatch = useDispatch();
   //const todosLosjuegos = useSelector((state)=> state.allVideogames)
   //console.log("todosLosjuegos");
   //console.log(todosLosjuegos);
-  const [data, setData] = useState([]);
-  const [dataLocal, setDataLocal] = useState([]);
-  const [sortOrder, setSortOrder] = useState('asc');
-  const [sortRatingOrder, setRatingOrder] = useState('ratingAsc');
+  
+  //const [data, setData] = useState([]);
+  //const [dataLocal, setDataLocal] = useState([]);
+  // const [sortOrder, setSortOrder] = useState('asc');
+  const [dataLocal] = useState([]);
+  const [sortOrder] = useState('asc');
+  //const [sortRatingOrder, setRatingOrder] = useState('ratingAsc');
+  const [sortRatingOrder] = useState('ratingAsc');
   const [name, setName] = useState("");
-  const [allGenres, setDataGeneres] = useState([]);
+  //const [allGenres, setDataGeneres] = useState([]);
 
+  let data = useSelector((state)=> state.allVideogames);
+  //console.log("data.allVideogames");
+  //console.log(data);
+  data = useSelector((state) => state.orderGames);
+  console.log("data.orderGames");
+  console.log(data);
+  const allGenres = useSelector((state)=> state.genresGames);
 
-  useEffect(() => {
-    console.log("getAllGames-useEffect");
-    console.log("getAllGames-filterOption");
-    console.log(filterOption);
-    console.log("getAllGames-name");       
-    console.log(name);  
-    console.log("getAllGames-filterOption");   
-    console.log(filterOption);
-    if (filterOption === '' && name === ''){
-      console.log("getAllGames-entrafiltro");
-      getAllGames().then((response) => {
-        console.log("getAllGames-response.data");
-        setData(response.data);  
-        setDataLocal(response.data);
+  const dispatch = useDispatch(); 
 
-      });      
-    }
+  useEffect(() => {  
+    dispatch(getAllGames());
+  },[dispatch])
+
+  useEffect(() => {  
+    dispatch(getGenres());
+  },[dispatch])
+
+  // useEffect(() => {
+  //   console.log("getAllGames-useEffect");
+  //   console.log("getAllGames-filterOption");
+  //   console.log(filterOption);
+  //   console.log("getAllGames-name");       
+  //   console.log(name);  
+  //   console.log("getAllGames-filterOption");   
+  //   console.log(filterOption);
+  //   if (filterOption === '' && name === ''){
+  //     console.log("getAllGames-entrafiltro");
+  //     // getAllGames().then((response) => {
+  //     //   console.log("getAllGames-response.data");
+  //     //   setData(response.data);  
+  //     //   setDataLocal(response.data);
+
+  //     // });
+            
+  //   }
     
-    // if(allGenres.length>0){
-    //   getAllGenres().then((response) => {
-    //     console.log("getAllGenres-pagiantor");
-    //     setDataGeneres(response.data);  
-    //   }); 
-    // }
-    getAllGenres().then((response) => {
-      setDataGeneres(response.data);  
-    }); 
-  }, [name,filterOption]);
+  //   // if(allGenres.length>0){
+  //   //   getAllGenres().then((response) => {
+  //   //     console.log("getAllGenres-pagiantor");
+  //   //     setDataGeneres(response.data);  
+  //   //   }); 
+  //   // }
+  //   getAllGenres().then((response) => {
+  //     setDataGeneres(response.data);  
+  //   }); 
+  // }, [name,filterOption]);
 
   const itemsPerPage = cardsPerPage;
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,22 +78,26 @@ const PaginationCards = ({ cardsPerPage,filterOption }) => {
   };
 
   const handleSortAsc = () => {
-    setSortOrder('asc');
-    setData([...data].sort((a, b) => a.name.localeCompare(b.name)));
+    //setSortOrder('asc');
+    //setData([...data].sort((a, b) => a.name.localeCompare(b.name)));
+    
+    dispatch(orderxGames('asc'));
   };
 
   const handleRatingAsc = () => {
-    setRatingOrder('ratingAsc');
-    setData([...data].sort((a, b) => a.rating-b.rating));
+    //setRatingOrder('ratingAsc');
+    //setData([...data].sort((a, b) => a.rating-b.rating));
+    dispatch(orderxGames('ratingAsc'));
   };
   
   const handleSortDesc = () => {
-    setSortOrder('desc');
-    setData([...data].sort((a, b) => b.name.localeCompare(a.name)));
+    //setSortOrder('desc');
+    dispatch(orderxGames('desc'));
+    //setData([...data].sort((a, b) => b.name.localeCompare(a.name)));
   };
   const handleRatingDesc = () => {
-    setRatingOrder('ratingDesc');
-    setData([...data].sort((a, b) => b.rating-a.rating));
+    dispatch(orderxGames('ratingDesc'));
+    //setData([...data].sort((a, b) => b.rating-a.rating));
   };
 
   const SearchGameByName = () => {    
@@ -85,7 +111,7 @@ const PaginationCards = ({ cardsPerPage,filterOption }) => {
           console.log("SearchGa-data");
           if(resp.data.length>0){  
             console.log("SearchGa-length");          
-              setData(resp.data);   
+            //setData(resp.data);   
           }        
           else
               window.alert("No hay videojuegos con ese nombre");
@@ -96,8 +122,8 @@ const PaginationCards = ({ cardsPerPage,filterOption }) => {
       });
     }else{
       getAllGames().then((response) => {
-        setData(response.data); 
-        setDataLocal(response.data);       
+        //setData(response.data); 
+        //setDataLocal(response.data);       
       });
     }
   };
@@ -108,30 +134,31 @@ const PaginationCards = ({ cardsPerPage,filterOption }) => {
     let valorSeleccionado=event.target.value;
     console.log("valorSeleccionado");
     console.log(valorSeleccionado);
+    dispatch(filterGenre(valorSeleccionado));
    
-    if(valorSeleccionado!=="All"){
-      filterGenres(valorSeleccionado).then((resp) => {
-        console.log("SearchGameByName-response-data");
-        console.log(resp.data);
-        if(resp.data){
-          if(resp.data.length>0){
-              setData(resp.data);
-          }           
-          else
-              window.alert("No hay videojuegos con el genero seleccionado");
-        }
-        else{
-          window.alert("No hay videojuegos con el genero seleccionado");
-        }
-      });
-      //console.log("SearchGameByName-data");
-      //console.log(data);
-    }else{
-      getAllGames().then((response) => {
-        setData(response.data); 
-        setDataLocal(response.data);       
-      });
-    }
+    // if(valorSeleccionado!=="All"){
+    //   filterGenres(valorSeleccionado).then((resp) => {
+    //     console.log("SearchGameByName-response-data");
+    //     console.log(resp.data);
+    //     if(resp.data){
+    //       if(resp.data.length>0){
+    //           //setData(resp.data);
+    //       }           
+    //       else
+    //           window.alert("No hay videojuegos con el genero seleccionado");
+    //     }
+    //     else{
+    //       window.alert("No hay videojuegos con el genero seleccionado");
+    //     }
+    //   });
+    //   //console.log("SearchGameByName-data");
+    //   //console.log(data);
+    // }else{
+    //   getAllGames().then((response) => {
+    //     //setData(response.data); 
+    //     //setDataLocal(response.data);       
+    //   });
+    // }
 }
 
 const handleFilterOrigen =(event)=>{
@@ -142,7 +169,7 @@ const handleFilterOrigen =(event)=>{
  
   if(origselect!=="All"){
     getAllGames().then((response) => {      
-      setDataLocal(response.data);
+      //setDataLocal(response.data);
     });  
     console.log("dataLocal");
     console.log(dataLocal);
@@ -152,7 +179,7 @@ const handleFilterOrigen =(event)=>{
           console.log("dataLocal");
           if(resultBD.length>0){
             console.log("dataLocal.length>");
-            setData(resultBD);  
+            //setData(resultBD);  
           }
           else{
             window.alert("No hay videojuegos registrados en la base de Datos VIDEOGAMES");
@@ -163,13 +190,14 @@ const handleFilterOrigen =(event)=>{
         }
           
     }else{
-      const resultApi = dataLocal.filter((game) => game.createdInDb === false)
-        setData(resultApi);    
+      
+      //const resultApi = dataLocal.filter((game) => game.createdInDb === false)
+        //setData(resultApi);    
     }
   }else{
     getAllGames().then((response) => {
-      setData(response.data);  
-      setDataLocal(response.data);      
+      //setData(response.data);  
+      //setDataLocal(response.data);      
     });
   }
 }
@@ -225,7 +253,7 @@ const handleFilterOrigen =(event)=>{
           <button
             href="#"
             onClick={(e) => handleClick(e, i)}
-            className={i === currentPage ? "active" : ""}
+            className={i === currentPage ? style.buttonPagActive : style.buttonDesactivo}
           >
             {i}
           </button>

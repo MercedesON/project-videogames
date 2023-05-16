@@ -1,8 +1,10 @@
-import { GET_ALLVIDEOGAMES,CREATE_VIDEOGAMES,FILTER_BY_GENRES} from "./actions";
+import { GET_GENRES,GET_ALLVIDEOGAMES,CREATE_VIDEOGAMES,ORDER_GAMES,GET_PLATFORMS,FILTER_GENRES} from "./actions";
 
 const initialState = {
     allVideogames: [],
-    filterVideogames:[]
+    genresGames: [],
+    platformsGames:[],
+    orderGames:[]
 }
 
 const rootReducer = (state = initialState,action) =>{
@@ -11,8 +13,8 @@ const rootReducer = (state = initialState,action) =>{
     switch (action.type) {
         case GET_ALLVIDEOGAMES: return {
             ...state,
-            allVideogames: action.payload,
-            filterVideogames: action.payload
+            allVideogames: action.payload ,           
+            orderGames: action.payload
         }
         case CREATE_VIDEOGAMES:
             state.allVideogames.push(action.payload);
@@ -20,28 +22,41 @@ const rootReducer = (state = initialState,action) =>{
                 ...state,
                 allVideogames:[...state.allVideogames]
             }
-
-        case FILTER_BY_GENRES:
-            const videoGamesG = state.allVideogames
-            let videogamelimpio=[];
-            console.log("FILTER_BY_GENRES");
-
-            let gameGenre = action.payload === 'All'
-            ? state.allVideogames                          //debemos aplicar map, porque genres es un array de string
-            : videoGamesG.filter((game) => {
-               return !game.genres
-                ? game.genres.includes(action.payload):videogamelimpio
-            })
-            //si selecciono otro entonces mostrar todos los Video Juegos
-            if (gameGenre.length === 0) {
-                gameGenre = videogamelimpio;
-                alert('No videogames found with the selected genre.')
-            }
-            
-            return{
-                ...state,
-                allVideogames: gameGenre
-            }
+        case GET_GENRES: return {
+            ...state,
+             //genresGames: action.payload
+             genresGames:[...action.payload].sort((a, b) => a.name.localeCompare(b.name))
+        }
+        case GET_PLATFORMS: return {
+            ...state,
+             //genresGames: action.payload
+             platformsGames:[...action.payload].sort((a, b) => a.name.localeCompare(b.name))
+        }
+        case ORDER_GAMES:            
+            const Games = [...state.allVideogames];      
+            const SortGames = (action.payload === 'asc'? Games.sort((a, b) => a.name.localeCompare(b.name))
+            : (action.payload === 'desc')? Games.sort((a, b) => b.name.localeCompare(a.name))
+            : (action.payload === 'ratingAsc')? Games.sort((a, b) => a.rating-b.rating)
+            :(action.payload === 'ratingDesc')? Games.sort((g1,g2) => {    
+                   if (g1.rating < g2.rating) return 1;
+                   if (g1.rating > g2.rating) return -1;  
+                   return 0;
+               }): Games)            
+        return{
+            ...state,
+            orderGames: SortGames
+        }
+        // case FILTER_GENRES: 
+       
+        //     const Videogame = [...state.filterGames];   
+        //     console.log("Videogame");
+        //     console.log(Videogame);   
+        //     const Filter = (action.payload === 'All'? Videogame 
+        //     : (action.payload !== 'All')? Videogame :Videogame )
+        // return{
+        //     ...state,
+        //     filterGames: Filter 
+        // }
         default: return {...state}
     }
 }
