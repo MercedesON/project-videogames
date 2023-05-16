@@ -1,4 +1,4 @@
-import { GET_GENRES,GET_ALLVIDEOGAMES,CREATE_VIDEOGAMES,ORDER_GAMES,GET_PLATFORMS,FILTER_GENRES, FILTER_ORIGIN} from "./actions";
+import { GET_GENRES,GET_ALLVIDEOGAMES,CREATE_VIDEOGAMES,ORDER_GAMES,GET_PLATFORMS,FILTER_GENRES, FILTER_ORIGIN,FILTER_NAME} from "./actions";
 
 const initialState = {
     allVideogames: [],
@@ -9,8 +9,8 @@ const initialState = {
 }
 
 const rootReducer = (state = initialState,action) =>{
-    console.log("action.type");
-    console.log(action.type);
+    //console.log("action.type");
+    //console.log(action.type);
     switch (action.type) {
         case GET_ALLVIDEOGAMES: return {
             ...state,
@@ -80,6 +80,20 @@ const rootReducer = (state = initialState,action) =>{
             ...state,
             //filterGames: Filter 
             orderGames: FilterOri
+        }
+        case FILTER_NAME:
+            console.log("FILTER_NAME-action.payload");
+            console.log(action.payload);
+            const FilName = [...state.filterGames];   
+            const FilGame = (action.payload === '')? FilName 
+            : FilName.filter((game)=>{
+                return  game.name.toUpperCase().includes(action.payload.toUpperCase()) ;
+            })
+            
+        return{
+            ...state,
+            //filterGames: Filter 
+            orderGames: FilGame
         }
         default: return {...state}
     }

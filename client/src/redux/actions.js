@@ -6,6 +6,8 @@ export const ORDER_GAMES = "ORDER_GAMES";
 export const GET_PLATFORMS = "GET_PLATFORMS";
 export const FILTER_GENRES = "FILTER_GENRES";
 export const FILTER_ORIGIN = "FILTER_ORIGIN";
+export const FILTER_NAME = "FILTER_NAME";
+
 //export const FILTER_BY_GENRES = "FILTER_BY_GENRES";
 
 //import { GET_GENRES,GET_ALLVIDEOGAMES,CREATE_VIDEOGAMES,ORDER_GAMES,GET_PLATFORMS,FILTER_GENRES} from "./actions";
@@ -34,6 +36,7 @@ export function getAllGames(){
 export const orderxGames = (order) => { return { type: ORDER_GAMES, payload: order } }
 export const filterGenre = (filter) => { return { type: FILTER_GENRES, payload: filter } }
 export const filterOrigin = (filter) => { return { type: FILTER_ORIGIN, payload: filter } }
+export const filterName = (filter) => { return { type: FILTER_NAME, payload: filter } }
 /*export function getAllGames() {
 
   let url = `http://localhost:3001/videogames`;

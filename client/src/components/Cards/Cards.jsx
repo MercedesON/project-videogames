@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 //import { useDispatch, useSelector } from "react-redux";//hooks
-import { getAllGames,getGameByName,getGenres,filterGenre,orderxGames,filterOrigin} from '../../redux/actions.js';
+import { getAllGames,getGameByName,getGenres,filterGenre,orderxGames,filterOrigin,filterName} from '../../redux/actions.js';
 import style from './Cards.module.css';
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,7 +18,8 @@ const PaginationCards = ({ cardsPerPage,filterOption }) => {
   //const [sortOrder] = useState('asc');
   //const [sortRatingOrder, setRatingOrder] = useState('ratingAsc');
   //const [sortRatingOrder] = useState('ratingAsc');
-  const [name, setName] = useState("");
+  let [name, setName] = useState("");
+  //let name="";
   //const [allGenres, setDataGeneres] = useState([]);
 
   let data = useSelector((state)=> state.allVideogames);
@@ -99,33 +100,33 @@ const PaginationCards = ({ cardsPerPage,filterOption }) => {
     //setData([...data].sort((a, b) => b.rating-a.rating));
   };
 
-  const SearchGameByName = () => {    
-    console.log("name");
-    console.log(name);
-    if(name!==""){
-      getGameByName(name).then((resp) => {
-        console.log("SearchGameByName-response-data");
-        console.log(resp.data);
-        if(resp.data){
-          console.log("SearchGa-data");
-          if(resp.data.length>0){  
-            console.log("SearchGa-length");          
-            //setData(resp.data);   
-          }        
-          else
-              window.alert("No hay videojuegos con ese nombre");
-        }
-        else{
-          window.alert("No hay videojuegos con ese nombre");
-        }
-      });
-    }else{
-      getAllGames().then((response) => {
-        //setData(response.data); 
-        //setDataLocal(response.data);       
-      });
-    }
-  };
+  // const SearchGameByName = () => {    
+  //   console.log("name");
+  //   console.log(name);
+  //   if(name!==""){
+  //     getGameByName(name).then((resp) => {
+  //       console.log("SearchGameByName-response-data");
+  //       console.log(resp.data);
+  //       if(resp.data){
+  //         console.log("SearchGa-data");
+  //         if(resp.data.length>0){  
+  //           console.log("SearchGa-length");          
+  //           //setData(resp.data);   
+  //         }        
+  //         else
+  //             window.alert("No hay videojuegos con ese nombre");
+  //       }
+  //       else{
+  //         window.alert("No hay videojuegos con ese nombre");
+  //       }
+  //     });
+  //   }else{
+  //     getAllGames().then((response) => {
+  //       //setData(response.data); 
+  //       //setDataLocal(response.data);       
+  //     });
+  //   }
+  // };
 
 
   const handleFilterGenres =(event)=>{
@@ -206,9 +207,22 @@ const handleFilterOrigen =(event)=>{
     });
   }*/
 }
-  const handleChange = (event) => {
-      setName(event.target.value);        //Guardo el valor del input en un estado local.
-  }
+const handleChange = (event) => {
+  //console.log("handleChange-name");
+  //console.log(event.target.value);
+  //name=event.target.value;
+  setName(event.target.value);        //Guardo el valor del input en un estado local.
+  console.log("handleChange-name-set");
+  console.log(name);
+}
+const handleFilterNames =(event)=>{
+  event.preventDefault();
+  console.log("handleFilterNames-name");
+  console.log(name);
+  dispatch(filterName(name)); 
+  //name=""; 
+}
+  
   const renderCards = () => {
     //const startIndex = (currentPage - 1) * itemsPerPage;
     //const endIndex = startIndex + itemsPerPage;
@@ -301,8 +315,10 @@ const handleFilterOrigen =(event)=>{
   return (
     <div>
       <div className={style.ContainerSearch}>
+      {/* <input className={style.searchInput}  onChange={handleChange} type="search" name="search" value={name}  /> */}
       <input className={style.searchInput}  onChange={handleChange} type="search" name="search" value={name}  />
-          <button className={style.searchButton}  onClick={SearchGameByName}>Search 🔎</button>
+          {/* <button className={style.searchButton}  onClick={SearchGameByName}>Search 🔎</button> */}
+          <button className={style.searchButton}  onClick={handleFilterNames}>Search 🔎</button>
         {/* <form className={style.ContainerForm}>
           
         </form>       */}
