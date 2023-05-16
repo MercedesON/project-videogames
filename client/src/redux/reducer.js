@@ -1,10 +1,11 @@
-import { GET_GENRES,GET_ALLVIDEOGAMES,CREATE_VIDEOGAMES,ORDER_GAMES,GET_PLATFORMS,FILTER_GENRES} from "./actions";
+import { GET_GENRES,GET_ALLVIDEOGAMES,CREATE_VIDEOGAMES,ORDER_GAMES,GET_PLATFORMS,FILTER_GENRES, FILTER_ORIGIN} from "./actions";
 
 const initialState = {
     allVideogames: [],
     genresGames: [],
     platformsGames:[],
-    orderGames:[]
+    orderGames:[],
+    filterGames:[]
 }
 
 const rootReducer = (state = initialState,action) =>{
@@ -14,7 +15,8 @@ const rootReducer = (state = initialState,action) =>{
         case GET_ALLVIDEOGAMES: return {
             ...state,
             allVideogames: action.payload ,           
-            orderGames: action.payload
+            orderGames: action.payload,//aca lleno 
+            filterGames: action.payload
         }
         case CREATE_VIDEOGAMES:
             state.allVideogames.push(action.payload);
@@ -46,17 +48,39 @@ const rootReducer = (state = initialState,action) =>{
             ...state,
             orderGames: SortGames
         }
-        // case FILTER_GENRES: 
-       
-        //     const Videogame = [...state.filterGames];   
-        //     console.log("Videogame");
-        //     console.log(Videogame);   
-        //     const Filter = (action.payload === 'All'? Videogame 
-        //     : (action.payload !== 'All')? Videogame :Videogame )
-        // return{
-        //     ...state,
-        //     filterGames: Filter 
-        // }
+        case FILTER_GENRES: 
+            console.log("FILTER_GENRES-action.payload");
+            console.log(action.payload);
+            const Videogame = [...state.filterGames];   
+            const Filter = (action.payload === 'All')? Videogame 
+            : Videogame.filter((game)=>{
+                return  game.genres.toUpperCase().includes(action.payload.toUpperCase()) ;
+            })
+            
+        return{
+            ...state,
+            //filterGames: Filter 
+            orderGames: Filter
+        }
+        case FILTER_ORIGIN: 
+            console.log("FILTER_ORIGIN-action.payload");
+            console.log(action.payload);
+            const VideogameOri = [...state.filterGames];   
+            console.log("FILTER_ORIGIN-VideogameOri");
+            console.log(VideogameOri);
+            const FilterOri = (action.payload === 'All'? VideogameOri 
+            :(action.payload === '0')? VideogameOri.filter((game)=>{
+                return  game.createdInDb===false })
+            :(action.payload === '1')? VideogameOri.filter((game)=>{
+                return  game.createdInDb===true  }):VideogameOri)
+
+            //const resultBD = dataLocal.filter((game) => game.createdInDb === true)
+            
+        return{
+            ...state,
+            //filterGames: Filter 
+            orderGames: FilterOri
+        }
         default: return {...state}
     }
 }

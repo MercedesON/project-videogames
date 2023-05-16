@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 //import { useDispatch, useSelector } from "react-redux";//hooks
-import { getAllGames,getGameByName,getGenres,filterGenre,orderxGames} from '../../redux/actions.js';
+import { getAllGames,getGameByName,getGenres,filterGenre,orderxGames,filterOrigin} from '../../redux/actions.js';
 import style from './Cards.module.css';
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,10 +14,10 @@ const PaginationCards = ({ cardsPerPage,filterOption }) => {
   //const [data, setData] = useState([]);
   //const [dataLocal, setDataLocal] = useState([]);
   // const [sortOrder, setSortOrder] = useState('asc');
-  const [dataLocal] = useState([]);
-  const [sortOrder] = useState('asc');
+  //const [dataLocal] = useState([]);
+  //const [sortOrder] = useState('asc');
   //const [sortRatingOrder, setRatingOrder] = useState('ratingAsc');
-  const [sortRatingOrder] = useState('ratingAsc');
+  //const [sortRatingOrder] = useState('ratingAsc');
   const [name, setName] = useState("");
   //const [allGenres, setDataGeneres] = useState([]);
 
@@ -25,8 +25,8 @@ const PaginationCards = ({ cardsPerPage,filterOption }) => {
   //console.log("data.allVideogames");
   //console.log(data);
   data = useSelector((state) => state.orderGames);
-  console.log("data.orderGames");
-  console.log(data);
+  //console.log("data.orderGames");
+  //console.log(data);
   const allGenres = useSelector((state)=> state.genresGames);
 
   const dispatch = useDispatch(); 
@@ -79,8 +79,7 @@ const PaginationCards = ({ cardsPerPage,filterOption }) => {
 
   const handleSortAsc = () => {
     //setSortOrder('asc');
-    //setData([...data].sort((a, b) => a.name.localeCompare(b.name)));
-    
+    //setData([...data].sort((a, b) => a.name.localeCompare(b.name)));    
     dispatch(orderxGames('asc'));
   };
 
@@ -166,8 +165,14 @@ const handleFilterOrigen =(event)=>{
   let origselect=event.target.value;
   console.log("origselect");
   console.log(origselect);
+  dispatch(filterOrigin(origselect))
+
+
+
+
+
  
-  if(origselect!=="All"){
+  /*if(origselect!=="All"){
     getAllGames().then((response) => {      
       //setDataLocal(response.data);
     });  
@@ -199,7 +204,7 @@ const handleFilterOrigen =(event)=>{
       //setData(response.data);  
       //setDataLocal(response.data);      
     });
-  }
+  }*/
 }
   const handleChange = (event) => {
       setName(event.target.value);        //Guardo el valor del input en un estado local.
@@ -215,7 +220,7 @@ const handleFilterOrigen =(event)=>{
       //const pageData = data.slice(startIndex, endIndex);
       const sortedData = [...data];
       console.log("sortData");
-      if (sortOrder === 'asc') {
+      /*if (sortOrder === 'asc') {
           sortedData.sort((a, b) => a.name.localeCompare(b.name));
         } else {
           sortedData.sort((a, b) => b.name.localeCompare(a.name));
@@ -224,7 +229,7 @@ const handleFilterOrigen =(event)=>{
           sortedData.sort((a, b) => a.rating-b.rating);
         } else {
           sortedData.sort((a, b) =>b.rating-a.rating);
-        }
+        }*/
       return data.slice(startIndex, endIndex).map((card) => {
         return (
           <div className={style.cardsContainer} key={card.id}>    
