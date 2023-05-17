@@ -28,6 +28,7 @@ const PaginationCards = ({ cardsPerPage,filterOption }) => {
   data = useSelector((state) => state.orderGames);
   //console.log("data.orderGames");
   //console.log(data);
+  let origselect="";
   const allGenres = useSelector((state)=> state.genresGames);
 
   const dispatch = useDispatch(); 
@@ -163,16 +164,11 @@ const PaginationCards = ({ cardsPerPage,filterOption }) => {
 
 const handleFilterOrigen =(event)=>{
   event.preventDefault();
-  let origselect=event.target.value;
+  origselect=event.target.value;
   console.log("origselect");
   console.log(origselect);
-  dispatch(filterOrigin(origselect))
-
-
-
-
-
- 
+  dispatch(filterOrigin(origselect));
+  origselect="";
   /*if(origselect!=="All"){
     getAllGames().then((response) => {      
       //setDataLocal(response.data);

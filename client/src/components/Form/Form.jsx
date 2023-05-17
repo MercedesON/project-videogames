@@ -14,7 +14,7 @@ import { createGames } from "../../redux/actions";
     console.log(allGenres);
   //const [allGenres, setDataGeneres] = useState([]);
   //const [allPlatforms, setDataPlatforms] = useState([]);
-  let allPlatformsSelect="All";
+  let allPlatformsSelect=[];
   let allGenresSelect=[];
   
   /*useEffect(() => {
@@ -63,13 +63,29 @@ import { createGames } from "../../redux/actions";
       inputs.genres=allGenresSelect;
     }
 }
-
 const handleSelectPlatform =(event)=>{
   //event.preventDefault();
-  allPlatformsSelect=event.target.value;
+  /*allPlatformsSelect=event.target.value;
   console.log("allPlatformsSelect-allPlatformsSelect");
   console.log(allPlatformsSelect);
-  inputs.platforms=allPlatformsSelect;
+  inputs.platforms=allPlatformsSelect;*/
+  const isChecked = event.target.checked;
+    const Value = event.target.value;
+    if(isChecked){   
+      console.log("handleSelectPlatform-isChecked");  
+      allPlatformsSelect.push(Value);
+      inputs.platforms=allPlatformsSelect ? allPlatformsSelect.map(vg => vg).join(" , ") : ''
+      console.log(inputs.platforms); 
+
+      //ch.genres ?  ch.genres.map(vg => vg.name).join(" , ") : '',
+
+    }else{
+      console.log("desscheck");
+      allPlatformsSelect=allPlatformsSelect.filter((f) => f !== Value);
+      inputs.platforms=allPlatformsSelect ? allPlatformsSelect.map(vg => vg).join(" , ") : ''
+
+      console.log(inputs.platforms); 
+    }
  
 }
 
@@ -125,8 +141,11 @@ const handleSelectPlatform =(event)=>{
       const aux = Object.keys(errors);      
       console.log("submit-aux");
       console.log(aux.length);
+      //Form(inputs);
       if (aux.length === 0) {
+        console.log("aux.length-0");   
         //formCreate(inputs);
+        //Form(inputs);        
         setInputs({
           name: "",
           image: "",
@@ -173,7 +192,46 @@ const handleSelectPlatform =(event)=>{
                 }                
                 alert(resp);      
             });
-            
+            setInputs({
+              name: "",
+              image: "",
+              description: "",
+              platforms: "",
+              released: "",
+              rating: "",
+              genres: "",
+    
+            });
+            setErrors({
+              name: "",
+              image: "",
+              description: "",
+              platforms: "",
+              released: "",
+              rating: "",
+              genres: "",
+            });
+            allGenresSelect=[];
+            allPlatformsSelect=[];
+            // inputs.name= "";
+            // inputs.image= "";
+            // inputs.description="";
+            // inputs.platforms="";
+            // inputs.released="";
+            // inputs.rating= "";
+            // inputs.genres="";
+            document.getElementById("name").value = "";
+            document.getElementById("image").value = "";
+            document.getElementById("description").value = "";
+            //document.getElementById("platforms").value = "";
+            document.getElementById("rating").value = "";
+            //document.getElementById("genres").value = "";           
+            document.getElementById("genres").checked = false;
+            //document.getElementById("platforms").checked = false;
+            //document.getElementById("checkbox").checked = false;
+
+            var checkbox = document.getElementById("platforms"); // Aqui seleccionas tu checkbox.
+            checkbox.prop("checked", false);
       }
     
   }
@@ -198,15 +256,31 @@ const handleSelectPlatform =(event)=>{
         <br />
         <label htmlFor="titulo" className={styles.Titulo}>CREATE VIDEOGAME </label>
         <label htmlFor="name">Name: </label>
-        <input className={styles.inputForm}  type="text" name="name" onChange={handleChange} />
+        <input className={styles.inputForm} id="name" type="text" name="name" onChange={handleChange} />
         <p className={styles.danger}>{errors.name}</p>        
         <label htmlFor="image" >Image URL: </label>
-        <input className={styles.inputForm} type="url" name="image" onChange={handleChange}></input>
+        <input className={styles.inputForm} id="image" type="url"  name="image" onChange={handleChange}></input>
         <p className={styles.danger}>{errors.image}</p>        
         <label htmlFor="description" >Description:</label>
-        <input className={styles.inputForm} type="text" name="description" onChange={handleChange} ></input>
-        <p className={styles.danger}>{errors.description}</p>        
-        <label htmlFor="platforms" >Platforms:</label>             
+        <input className={styles.inputForm} id="description" type="text" name="description" onChange={handleChange} ></input>
+        <p className={styles.danger}>{errors.description}</p> 
+
+         <label htmlFor="platforms" className={styles.label}>Choose at least one Platform:</label>
+        <br />
+
+        <div className={styles.containercheckbox}>
+          {
+            allPlatforms?.map((pl) => (
+              <div>
+                <input className={styles.checkbox} id="platforms" type="checkbox" onClick={(event) => handleSelectPlatform(event)} value={pl.name} />
+                <label className={styles.Labelcheckbox} key={pl.name} htmlFor={pl.id}>{pl.name}</label>
+              </div>
+            ))
+          }
+        </div> 
+
+
+        {/* <label htmlFor="platforms" >Platforms:</label>             
         <br />
         <select className={styles.SelecPlatform} onChange={handleSelectPlatform}>                  
                 <option value="All" >Todos</option>
@@ -215,16 +289,17 @@ const handleSelectPlatform =(event)=>{
                             <option key={pl.id} value={pl.name}>{pl.name}</option>
                         ))
                     }
-        </select>   
+        </select>    */}
+        
         {/* <p className={styles.danger}>{errors.platforms}</p>        */}
         <br />       
         <br />   
         <br /> 
         <label htmlFor="released" className={styles.label}>Released:</label>
-        <input className={styles.inputForm} type="date" name="released" onChange={handleChange} ></input>
+        <input className={styles.inputForm} id="released" type="date" name="released" onChange={handleChange} ></input>
         <p className={styles.danger}>{errors.released}</p>        
         <label htmlFor="rating" className={styles.label}>Rating</label>
-        <input className={styles.inputForm}
+        <input className={styles.inputForm} id="rating"
           type="number"
           name="rating"
           // onBlur={(event) => ratingInCero(event)}
@@ -237,7 +312,7 @@ const handleSelectPlatform =(event)=>{
         {
             allGenres?.map((gen)=>(
                   <div>
-                    <input className={styles.checkbox} type="checkbox" onClick={(event) => AddSelectGenres(event)} value={gen.id}/>                  
+                    <input className={styles.checkbox} id="genres" type="checkbox" onClick={(event) => AddSelectGenres(event)} value={gen.id}/>                  
                     <label className={styles.Labelcheckbox} key={gen.name} htmlFor={gen.name}>{gen.name}</label>
                   </div>      
             ))

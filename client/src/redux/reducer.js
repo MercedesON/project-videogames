@@ -85,10 +85,10 @@ const rootReducer = (state = initialState,action) =>{
             console.log("FILTER_NAME-action.payload");
             console.log(action.payload);
             const FilName = [...state.filterGames];   
-            const FilGame = (action.payload === '')? FilName 
+            const FilGame = (action.payload === ''? FilName 
             : FilName.filter((game)=>{
                 return  game.name.toUpperCase().includes(action.payload.toUpperCase()) ;
-            })
+            }))
             
         return{
             ...state,
